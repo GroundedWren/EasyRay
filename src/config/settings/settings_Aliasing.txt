@@ -1,0 +1,8 @@
+Ambient:0.13
+Specular:1.0
+OutputDim:1000 1000
+OutputFilename:testOut.png
+CameraFilename:camera_Aliasing.txt
+SceneFilename:scene_Aliasing.txt
+MaxRecur:5
+FreeObjects

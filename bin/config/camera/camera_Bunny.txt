@@ -1,0 +1,10 @@
+Eyepoint:0,90,100
+Lookat:0,0,-100
+Up:0,-1,0
+PixelWidth:1
+FOV:90
+wres:1000
+hres:1000
+mode:perspective
+SampleType:None
+SampleSize:1

@@ -1,0 +1,12 @@
+Background:0,73,176
+EmitterSampleType:Uniform
+EmitterSampleSize:1
+Sphere:80,-30,-180 50.0 0,0,255 src/images/Moon.png 1250.0 0.0 0.0 0.0 0.0 False
+Sphere:-30,20,-50 10.0 255,0,0 none 50 0.0 0.0 0.0 0.0 False
+Sphere:-30,-10,-70 5.0 254,138,0 none 1250.0 0.0 0.0 0.0 0.0 False
+Triangle:-60,40,-80 30,40,-80 -20,-20,-80 255,255,0 1250.0 0.0 0.0 0.5 0.9
+Rectangle:-40,-40,-70 0,30,0 30,0,0 100,100,100 src/images/Skiing.png 1250.0 0.0 0.0 0.0 0.0 False
+Plane:0,-100,0 -0.5,-1,0 0,0,0 255,255,255 -1.0 0.0 0.0 0.0 0.0 0,0,-1 100 none
+PointLight:100,500,-300 201,228,255
+PointLight:10,80,0 173,173,173
+Sphere:1,0,-200 90 0,255,0 none 1250 0 0 0 0 False

@@ -1,0 +1,8 @@
+Ambient:0.13
+Specular:1.0
+OutputDim:1000 1000
+OutputFilename:testOut.png
+CameraFilename:camera_Reflect.txt
+SceneFilename:scene_Reflect.txt
+MaxRecur:5
+FreeObjects

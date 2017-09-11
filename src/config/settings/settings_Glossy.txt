@@ -1,0 +1,8 @@
+OutputDim:1000 1000
+OutputFilename:testOut.png
+CameraFilename:camera_Glossy.txt
+SceneFilename:scene_Glossy.txt
+MaxRecur:2
+Ambient:0.13
+Specular:1.0
+FreeObjects

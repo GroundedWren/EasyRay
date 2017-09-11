@@ -1,0 +1,9 @@
+Background:0,0,0
+EmitterSampleType:MultiJitter
+EmitterSampleSize:20
+Sphere:0,0,-200 100.0 0,255,0 none 50.0 0.5 0.0 0.0 0.0 False
+Sphere:-30,20,-50 10.0 255,0,0 none 50 0.0 0.0 0.8 2.0 False
+Sphere:-30,-10,-150 5 254,0,0 none 1250.0 0.0 0.0 0.0 0.0 False
+Triangle:-60,40,-80, 30,40,-80 -20,-20,-70 255,255,0 1250.0 0.0 0.0 0.8 2.0
+Plane:0,-100,0, 0,-1,0 255,255,0 255,255,0 -1 0.0 0.0 0.0 0.0 0,0,-1 10 none
+PointLight:0,100,0 255,255,255

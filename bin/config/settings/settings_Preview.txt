@@ -1,0 +1,8 @@
+OutputDim:200 200
+OutputFilename:preview.png
+CameraFilename:camera_Preview.txt
+SceneFilename:scene_Preview.txt
+MaxRecur:2
+Ambient:0.13
+Specular:1.0
+FreeObjects

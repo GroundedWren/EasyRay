@@ -1,0 +1,7 @@
+Background:0,0,0
+EmitterSampleType:Random
+EmitterSampleSize:4
+Sphere:-50,-80,-400 10.0 255,0,100 none 1250.0 0.0 0.0 0.0 0.0 False
+Sphere:30,-50,-180 50.0 0,0,255 none 1250.0 0.0 0.0 0.0 0.0 False
+Rectangle:-70,-70,-300 0,50,0 50,0,0 255,255,255 none 1250.0 0.0 0.0 0.0 0.0 True
+Plane:0,-100,0, 0,-1,0 255,255,0 255,255,0 -1 0.0 0.0 0.0 0.0 0,0,-1 10 none

@@ -1,0 +1,8 @@
+Background:0,0,0
+EmitterSampleType:MultiJitter
+EmitterSampleSize:16
+Sphere:-30,-30,-500 120.0 0,255,0 src/images/Earth.png 51.0 0.0 0.0 0.0 0.0 False
+Sphere:-30,30,-1500 200.0 0,255,0 src/images/Sun.png 51.0 0.0 0.0 0.0 0.0 True
+Sphere:200,-10,-600 20.0 0,255,0 src/images/Moon.png 51.0 0.0 0.0 0.0 0.0 False
+Sphere:300,30,-1500 100.0 0,255,0 src/images/BlueSun.png 51.0 0.0 0.0 0.0 0.0 True
+Sphere:60,50,-550 10.0 0,255,0 none 51.0 1.0 0.0 0.0 0.0 False

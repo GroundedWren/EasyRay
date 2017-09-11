@@ -1,0 +1,8 @@
+Ambient:0.13
+Specular:1.0
+OutputDim:1000 1000
+OutputFilename:testOut.png
+CameraFilename:camera_AreaLight.txt
+SceneFilename:scene_AreaLight.txt
+MaxRecur:5
+FreeObjects

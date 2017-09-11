@@ -1,0 +1,9 @@
+Ambient:0.13
+Specular:1.0
+OutputDim:1000 1000
+OutputFilename:SolarSystem.png
+CameraFilename:camera_SolarSystem.txt
+SceneFilename:scene_SolarSystem.txt
+MaxRecur:5
+FreeObjects
+//RegularGrid:10

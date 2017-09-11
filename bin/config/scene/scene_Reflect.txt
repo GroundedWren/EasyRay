@@ -1,0 +1,13 @@
+Background:0,0,0
+EmitterSampleType:MultiJitter
+EmitterSampleSize:16
+Sphere:50,20,-100 10.0 3,3,3 none 1250.0 1.0 0.0 0.0 0.0 False
+Sphere:0,0,-200 100.0 0,255,0 none 50.0 0.5 0.0 0.0 0.0 False
+Sphere:80,-30,-180 50.0 0,0,255 none 1250.0 0.0 0.0 0.0 0.0 False
+Sphere:-30,20,-50 10.0 255,0,0 none 50 0.0 0.0 0.8 2.1 False
+Sphere:-30,-10,-70 5.0 254,0,0 none 1250.0 0.0 0.0 0.0 0.0 False
+Triangle:-60,40,-80, 30,40,-80 -20,-20,-70 255,255,0 1250.0 0.0 0.0 0.8 2.0
+Rectangle:-40,-40,-70 0,30,0 30,0,0 100,100,100 src/images/Earth.png 1250.0 0.0 0.0 0.0 0.0 False
+Plane:0,-100,0 0,-1,0 255,255,255 0,0,0 -1 0.7 0.0 0.0 0.0 0,0,-1 10 none
+PointLight:100,500,-300 255,0,255
+PointLight:0,100,0 255,255,255

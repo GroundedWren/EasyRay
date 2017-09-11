@@ -1,0 +1,10 @@
+Eyepoint:110,60,-450
+Lookat:0,0,-1500
+Up:-1,-1,0.5
+PixelWidth:1
+FOV:90
+wres:1000
+hres:1000
+mode:perspective
+SampleType:MultiJitter
+SampleSize:8

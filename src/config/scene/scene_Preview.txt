@@ -1,0 +1,6 @@
+Background:0,0,0
+EmitterSampleType:Uniform
+EmitterSampleSize:1
+Plane:0,-10,0, 0,-1,0 255,255,0 255,255,0 -1 0.0 0.0 0.0 0.0 0,0,-1 10 none
+Mesh:src/meshes/bunny.obj 0,-50,-100 1000.0 1,1,1 0.0,0.0 0,50,105 1250.0 0.5 0.0 0.0 1.0
+Sphere:60,90,-50 10.0 255,0,0 src/images/Sun.png 50 0.0 0.0 0.0 0.0 True

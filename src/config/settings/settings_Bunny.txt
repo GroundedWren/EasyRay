@@ -1,0 +1,8 @@
+OutputDim:1000 1000
+OutputFilename:testOut.png
+CameraFilename:camera_Bunny.txt
+SceneFilename:scene_Bunny.txt
+MaxRecur:5
+Ambient:0.13
+Specular:1.0
+RegularGrid:3

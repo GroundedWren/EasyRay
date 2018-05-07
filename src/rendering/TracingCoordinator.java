@@ -1,9 +1,15 @@
 package rendering;
 import java.io.*;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import geometry.*;
 import acceleration.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * TracingCoordinator coordinates all components of ray tracing.
@@ -39,7 +45,9 @@ public class TracingCoordinator
 	private int emitterSampleSize;
 	//Makes complex geometry run faster
 	private AccelerationStructure accelerationStructure;
-	
+	//Thread list
+	private ArrayList<RayShooter> processingThreads;
+
 	/**
 	 * Reads in and parses GeometricObjects and PointLights from a scene file
 	 * @param filename the scene file
@@ -387,73 +395,115 @@ public class TracingCoordinator
 	}
 	
 	/**
+	 * Shoots an individual ray from the specified threadNum
+	 * @param viewRay
+	 * @param threadNum
+	 */
+	public void shootRay(Ray viewRay, int threadNum)
+	{
+		HitPoint hitp = intersectObjects(viewRay);
+		int[] pixelCoords = viewRay.getPixel();
+		if(hitp.getObject() != null)
+		{
+			GeometricObject obj = hitp.getObject();
+			TripletVector intersection = hitp.getPoint();
+			TripletVector objectColor = obj.getColor(intersection);
+			if(!obj.isEmitter())
+			{
+				TripletVector sceneLight = getLightFromPointSources(intersection, viewRay, obj).add(getLightFromEmitters(intersection, viewRay, obj));
+				camera.updatePixel(objectColor.scale(ambient).add(sceneLight).scale(viewRay.getWeight()*(1-obj.getReflectivity()-obj.getRefractivity())), pixelCoords);
+			}
+			else
+				camera.updatePixel(objectColor, pixelCoords);
+			
+			//reflection
+			if(obj.getReflectivity() > 0 && viewRay.getDepth() < maxRecur)
+			{
+				if(obj.getGlossyExponent() > 0)
+				{
+					//Glossy reflection shoots 16 vectors
+					ArrayList<Ray> reflectedRays = obj.getReflectionRaysGlossy(viewRay, intersection, 16);
+					for(Ray refR : reflectedRays)
+					{
+						processingThreads.get(threadNum).addRay(refR);
+					}
+				}
+				else
+				{
+					Ray reflectedRay = obj.getReflectionRay(viewRay, intersection);
+					processingThreads.get(threadNum).addRay(reflectedRay);
+				}
+			}
+			//refraction
+			if(obj.getRefractivity() > 0 && viewRay.getDepth() < maxRecur)
+			{
+				Ray refractedray = obj.getRefractionray(viewRay, intersection);
+				processingThreads.get(threadNum).addRay(refractedray);
+			}
+		}
+		else
+		{
+			camera.updatePixel(backgroundColor.scale(viewRay.getWeight()), pixelCoords);
+		}
+	}
+			
+	/**
 	 * Shoots all rays from the camera, retrieves the colors from the intersected objects
 	 * and the point source light, then updates the camera's film
 	 */
 	private void takePicture()
 	{
+		processingThreads = new ArrayList<RayShooter>();
 		ArrayList<Ray> queuedRays = camera.getRays();
+		long startTime = System.currentTimeMillis();
+		
 		int queueSize = queuedRays.size();
+		int numThreads = 4;
+		int chunkSize = Math.floorDiv(queueSize, numThreads);
 		int queueIndex = 0;
-		int iterations = 0;
-		while(queueIndex < queueSize)
+		for(int i = 0; i < numThreads; i++)
 		{
-			Ray viewRay = queuedRays.get(queueIndex);
-			queueIndex++;
-			HitPoint hitp = intersectObjects(viewRay);
-			int[] pixelCoords = viewRay.getPixel();
-			if(hitp.getObject() != null)
+			RayShooter process = new RayShooter(i, this);
+			int[] lastPixel = null;
+			for(int j = 0; j < chunkSize; j++)
 			{
-				GeometricObject obj = hitp.getObject();
-				TripletVector intersection = hitp.getPoint();
-				TripletVector objectColor = obj.getColor(intersection);
-				if(!obj.isEmitter())
-				{
-					TripletVector sceneLight = getLightFromPointSources(intersection, viewRay, obj).add(getLightFromEmitters(intersection, viewRay, obj));
-					camera.updatePixel(objectColor.scale(ambient).add(sceneLight).scale(viewRay.getWeight()*(1-obj.getReflectivity()-obj.getRefractivity())), pixelCoords);
-				}
-				else
-					camera.updatePixel(objectColor, pixelCoords);
-				
-				//reflection
-				if(obj.getReflectivity() > 0 && viewRay.getDepth() < maxRecur)
-				{
-					if(obj.getGlossyExponent() > 0)
-					{
-						//Glossy reflection shoots 16 vectors
-						ArrayList<Ray> reflectedRays = obj.getReflectionRaysGlossy(viewRay, intersection, 16);
-						for(Ray refR : reflectedRays)
-						{
-							queuedRays.add(refR);
-							queueSize++;
-						}
-					}
-					else
-					{
-						Ray reflectedRay = obj.getReflectionRay(viewRay, intersection);
-						queuedRays.add(reflectedRay);
-						queueSize++;
-					}
-				}
-				//refraction
-				if(obj.getRefractivity() > 0 && viewRay.getDepth() < maxRecur)
-				{
-					Ray refractedray = obj.getRefractionray(viewRay, intersection);
-					queuedRays.add(refractedray);
-					queueSize++;
-				}
+				if(queueIndex >= queueSize)
+					break;
+				Ray rayToAdd = queuedRays.get(queueIndex);
+				lastPixel = rayToAdd.getPixel();
+				process.addRay(rayToAdd);
+				queueIndex++;
 			}
-			else
+			while(queueIndex < queueSize && queuedRays.get(queueIndex).getPixel() == lastPixel)
 			{
-				camera.updatePixel(backgroundColor.scale(viewRay.getWeight()), pixelCoords);
+				process.addRay(queuedRays.get(queueIndex));
+				queueIndex++;
 			}
-			iterations++;
-			if(iterations % 10000 == 0)
-			{
-				System.out.println(iterations + " iterations");
-			}
-			pixelCoords = null;
+			processingThreads.add(process);
 		}
+		for(; queueIndex < queueSize; queueIndex++)
+		{
+			processingThreads.get(numThreads-1).addRay(queuedRays.get(queueIndex));
+		}
+		ExecutorService exec = Executors.newFixedThreadPool(numThreads);
+		try
+		{
+			List<Future<Double>> threadOut = exec.invokeAll(processingThreads);
+			for(Future<Double> f : threadOut)
+			{
+				System.out.println("THREAD FINISHED IN " + f.get() + " ITERATIONS");
+			}
+		}
+		catch(InterruptedException | ExecutionException e)
+		{
+			e.printStackTrace();
+		}
+		exec.shutdown();
+		
+		long endTime = System.currentTimeMillis();
+		DecimalFormat df = new DecimalFormat("###.###");
+		df.setRoundingMode(RoundingMode.HALF_DOWN);
+		System.out.println(df.format((endTime - startTime)*0.001) + " Seconds");
 	}
 	
 	/**

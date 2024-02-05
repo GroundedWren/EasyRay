@@ -28,8 +28,8 @@ EasyRay_Manual.pdf details the use of EasyRay.
 
 # Author
 
-Alex Aulabaugh
-aaulabaugh@gmail.com
+Kathryn Aulabaugh
+kathryn.aulabaugh@gmail.com
 
 
 # Acknowledgements
